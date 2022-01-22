@@ -164,29 +164,31 @@ class main extends Controller
         }
         return view('alterar_senha');
     }
-
+    //------alterar senha do usuario-----------------------
     public function alterando_senha(altearSenhaRequest $request){
 
         $request->validated();
 
-        //dados enviados
+        //dados enviados sem espaços
         $nova_senha = trim($request->input('nova_senha'));
         $confirma_senha = trim($request->input('confirma_senha'));
         $senha_atual = trim($request->input('atual_senha'));
         $id_usuario = session('usuario')->id;
         
-
+        //verificar se senha e confirmar senha corresponde
         if($nova_senha != $confirma_senha){
             $erro = ['erro' => 'Senha e confirmar senha nao correspondem.'];
 
             return view('alterar_senha', $erro);
         }
+
+        //verificar se a senha atual estar correta
         $usuario = Usuario::find($id_usuario);
         if (!hash::check($senha_atual, $usuario->senha)) {
             $erro = ['erro' => 'Senha invalida'];
             return view('alterar_senha', $erro);
         }
-
+         //salvando nova senha
         $usuario->senha = Hash::make($nova_senha);;
         $usuario->save();
 
