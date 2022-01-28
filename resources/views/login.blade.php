@@ -47,6 +47,11 @@
             <div class="alert alert-danger text-center">{{$erro}}</div>
                 
             @endif
+            @if (isset($mensagem))
+          
+            <div class="alert alert-success text-center">{{$mensagem}}</div>
+                
+            @endif
         </div>
     </div>
 </div>

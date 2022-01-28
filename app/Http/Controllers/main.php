@@ -9,7 +9,9 @@ use App\Models\usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\cadastroRequest;
+use App\Mail\token;
 use DateTime;
+use Illuminate\Support\Facades\Mail;
 
 class main extends Controller
 {
@@ -52,6 +54,7 @@ class main extends Controller
     //-----recebendo dados do formulario de cadastro---
     public function cadastrar(cadastroRequest $request)
     {
+
         //validar dados
         $request->validated();
 
@@ -80,23 +83,79 @@ class main extends Controller
 
             return view('cadastrar', $erro);
         }
+        
+        //enviar token para o email
+        $token = random_int(100000, 999999);
 
+       Mail::to($email_usuario)->send(new token($nome_usuario, $token));
+        $senha = Hash::make($senha_usuario);
 
-    //cadastrar o usuario e retornar ou login
+        //guardando inforçoes na sessao temporaria
+        $new_user = [
+            'nome' => $nome_usuario,
+            'email' => $email_usuario,
+            'senha' => $senha,
+            'token' => $token
+                ];
+        $request->session()->put($new_user);
+
+        if (!$this->checksessaotoken()) {
+            return redirect()->route('login');
+        }
+        return view('comfirma_token');
+
+    }
+
+    //recebendo token 
+    public function confirmar_token(Request $request){
+        //verificar se existe sessao token
+        if (!$this->checksessaotoken()) {
+            return redirect()->route('login');
+        }
+
+        //verificar se ja existe sessao
+        if ($this->checksessao()) {
+            return redirect()->route('index');
+        }
+
+        $token = trim($request->input('frm_token'));
+
+       if($token != session('token')){
+           
+        $erro = ['erro' => 'Codigo de verificação invalido.'];
+        return view('comfirma_token', $erro);
+        
+    }else{
+        //cadastrando usuario
         $usuario = new Usuario;
-        $usuario->nome = $nome_usuario;
-        $usuario->email = $email_usuario;
-        $usuario->senha = Hash::make($senha_usuario);
+        $usuario->nome = session('nome');
+        $usuario->email = session('email');
+        $usuario->senha = session('senha');
         $usuario->save();
 
-        return redirect()->route('login');
+        //limpando sessao temporara
+        session()->forget('nome');
+        session()->forget('email');
+        session()->forget('senha');
+        session()->forget('token');
+
+        $mensagem = ['mensagem'=>'Cadastrado. Faça o login para entrar.'];
+
+        return view('login', $mensagem);
     }
+}
 
     // usar pra verificar se existe sessao 
     private function checksessao()
     {
         return session()->has('usuario');
     }
+    private function checksessaotoken()
+    {
+        return session()->has('token');
+    }
+
+
 
     //receber dados do formulario de login
     public function frm_submit(loguinRequest $request)

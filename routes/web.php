@@ -25,6 +25,7 @@ Route::post('/alterando_senha',[main::class,'alterando_senha'])->name('alterando
 
 Route::get('/cadastro',[main::class, 'cadastro'])->name('cadastro');
 Route::post('/cadastrar',[main::class, 'cadastrar'])->name('cadastrar');
+Route::post('/confirmar_token',[main::class , 'confirmar_token'])->name('confirmar_token');
 Route::post('/editar_perfil_usuario',[main::class, 'editar_perfil_usuario'])->name('editar_perfil_usuario');
 Route::get('/editar_perfil',[main::class,'editar_perfil'])->name('editar_perfil');
 route::get('/excluir_perfil', [main::class, 'excluir_perfil'])->name('excluir_perfil');
