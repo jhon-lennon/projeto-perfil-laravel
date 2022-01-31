@@ -1,4 +1,3 @@
-
 @extends('frm_login')
 @section('conteudo')
 
@@ -6,22 +5,17 @@
     <div class="row mt-5">
         <div class="col-sm-4 offset-sm-4">
             {{--inicio formulario--}}
-            <form action="{{route('frm_submit')}}" method="post">
+            <form action="{{route('recuperar_senha_frm')}}" method="post">
              @csrf
-                <h4>Login</h4>
+                <h4>Recuperar Senha</h4>
                 <hr>
                 <div class="form-group">
-                    <label>Usuario</label> 
-                    <input type="email" name="text_email" class="form-control">           
-                </div>
-                <div class="form-group">
-                    <label>Senha</label> 
-                    <input type="password" name="text_senha" class="form-control">           
-                </div>
+                    <label>Email</label> 
+                    <input type="email" name="text_email" class="form-control"> 
                 <div class="form-group">
                     <br>
-                    <input type="submit" value="Entrar" class="btn btn-primary">  
-                    <a href="{{route('cadastro')}}" class="btn btn-secondary">Cadastre-se</a>
+                    <input type="submit" value="Enviar" class="btn btn-primary">  
+                    <a href="{{route('login')}}" class="btn btn-secondary">Cancelar</a>  
                 </div> 
 
             </form><br>
@@ -47,23 +41,9 @@
             <div class="alert alert-danger text-center">{{$erro}}</div>
                 
             @endif
-
-
-            @if (isset($erro_senha))
-
-            <div class="alert alert-danger text-center">{{$erro_senha}} <a href="{{route('recuperar_senha')}}"class="alert-link">Esqueci a senha</a></div>
-
-            @endif
-
-            @if (isset($mensagem))
-          
-            <div class="alert alert-success text-center">{{$mensagem}}</div>
-                
-            @endif
         </div>
     </div>
 </div>
-
 
 
 @endsection

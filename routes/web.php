@@ -29,6 +29,11 @@ Route::post('/confirmar_token',[main::class , 'confirmar_token'])->name('confirm
 Route::post('/editar_perfil_usuario',[main::class, 'editar_perfil_usuario'])->name('editar_perfil_usuario');
 Route::get('/editar_perfil',[main::class,'editar_perfil'])->name('editar_perfil');
 route::get('/excluir_perfil', [main::class, 'excluir_perfil'])->name('excluir_perfil');
+route::get('/recuperar_senha', [main::class, 'recuperar_senha'])->name('recuperar_senha');
+Route::post('/recuperar_senha_frm',[main::class, 'recuperar_senha_frm'])->name('recuperar_senha_frm');
+Route::post('/recuperar_senha_token',[main::class, 'recuperar_senha_token'])->name('recuperar_senha_token');
+Route::post('/recuperando_senha',[main::class, 'recuperando_senha'])->name('recuperando_senha');
+
 //-------------tarefas------------------------
 
 Route::get('/invisivel_tarefa',[main2::class, 'invisivel_tarefa'])->name('invisivel_tarefa');

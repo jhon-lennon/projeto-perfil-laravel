@@ -79,7 +79,7 @@ class main2 extends Controller
 
       $tarefa = task::where('id_usuario', $id)->where('visivel', 1)->orderBy('created_at', 'desc')->get();
 
-      return view('home', ['tarefa' => $tarefa]);
+      return redirect()->route('home');
    }
 
    public function concluido($id)
@@ -98,7 +98,7 @@ class main2 extends Controller
 
       $tarefa = task::where('id_usuario', $id)->where('visivel', 1)->orderBy('created_at', 'desc')->get();
 
-      return view('home', ['tarefa' => $tarefa]);
+      return redirect()->route('home');
    }
    public function afazer($id)
    {
