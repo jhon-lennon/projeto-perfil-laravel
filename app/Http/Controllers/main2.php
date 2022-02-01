@@ -11,6 +11,16 @@ use Usuarios;
 
 class main2 extends Controller
 {
+   //-----usar para encriptar-----
+   public function encriptar($valor){
+      return bin2hex(openssl_encrypt($valor, 'aes-256-cbc','4Hzxso5WHSxMYA93flJ14R6qtd0HftKF', OPENSSL_RAW_DATA,'p4Sml4pAdinhB384'));
+   }
+   //-----usar para densencriptar--
+   public function desencriptar($valor_enc){
+      return openssl_decrypt( hex2bin($valor_enc), 'aes-256-cbc','4Hzxso5WHSxMYA93flJ14R6qtd0HftKF', OPENSSL_RAW_DATA,'p4Sml4pAdinhB384');
+   }
+
+
    public function home()
    {
       if (!$this->checksessao()) {
@@ -56,7 +66,7 @@ class main2 extends Controller
       if (!$this->checksessao()) {
          return redirect()->route('login');
       }
-
+      $id = $this->desencriptar($id);
 
 
       $tarefa = task::find($id);
@@ -70,7 +80,7 @@ class main2 extends Controller
       if (!$this->checksessao()) {
          return redirect()->route('login');
       }
-
+      $id = $this->desencriptar($id);
 
       $tarefa = task::find($id);
       $tarefa->visivel = 1;
@@ -88,7 +98,7 @@ class main2 extends Controller
          return redirect()->route('login');
       }
 
-
+      $id = $this->desencriptar($id);
 
       $tarefa = task::find($id);
       $tarefa->concluido =  new DateTime();
@@ -106,7 +116,7 @@ class main2 extends Controller
          return redirect()->route('login');
       }
 
-
+      $id = $this->desencriptar($id);
 
       $tarefa = task::find($id);
       $tarefa->concluido = null;
@@ -117,6 +127,7 @@ class main2 extends Controller
 
    public function editar_tarefa($id)
    {
+      $id = $this->desencriptar($id);
 
       if (!$this->checksessao()) {
          return redirect()->route('login');
@@ -162,7 +173,7 @@ class main2 extends Controller
       if (!$this->checksessao()) {
          return redirect()->route('login');
       }
-
+      $id = $this->desencriptar($id);
 
       $tarefa = task::find($id);
       $tarefa->delete();

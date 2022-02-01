@@ -13,6 +13,7 @@ use App\Http\Requests\cadastroRequest;
 use App\Http\Requests\recuperarSenhaRequest;
 use App\Mail\token;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class main extends Controller
@@ -98,8 +99,12 @@ class main extends Controller
             $erro = ['erro_senha' => 'Senha incorreta.'];
             return view('login', $erro);
         }
+        
         // iniciar a sesao e ir para o home
         session()->put('usuario', $usuari);
+        $usuario = session('usuario')->email;
+        Log::channel('Registro_log')->info('Usuario '.$usuario.', fez um login');
+
         return redirect()->route('index');
     }
     //==============================================================================================================================
@@ -111,6 +116,9 @@ class main extends Controller
         if (!$this->checksessao()) {
             return redirect()->route('login');
         }
+        $usuario = session('usuario')->email;
+
+        Log::channel('Registro_log')->info('Usuario '.$usuario.' saiu');
         session()->forget('usuario');
         return redirect()->route('index');
     }
