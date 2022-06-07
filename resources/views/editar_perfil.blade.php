@@ -3,22 +3,27 @@
 
 <div class="container">
     <div class="row mt-5">
-        <div class="col-sm-4 offset-sm-4">
+        <div class="col-sm-4 offset-sm-4 ">
+            <p class="text-center" ><img src="assets\fotos_usuarios\{{(session('usuario'))->foto}}" style="border-radius: 70px; height: 200px;  width: 200px;"></p>
             {{--inicio formulario--}}
-            <form action="{{route('editar_perfil_usuario')}}" method="post">
+            <form action="{{route('editar_perfil_usuario')}}" method="post" enctype="multipart/form-data">
              @csrf
-                <h4>Editar dados</h4>
+                <h4 class="text-center">Editar dados</h4>
                 <hr>
                 <div class="form-group">
                     <label>Nome</label> 
-                    <input type="text" name="text_nome" class="form-control"> 
+                    <input type="text" name="text_nome" value="{{(session('usuario'))->nome}}" class="form-control"> 
 
                 </div>
                 <div class="form-group">
                     <label>Email</label> 
-                    <input type="email" name="text_email" class="form-control"> 
+                    <input type="email" name="text_email" value="{{(session('usuario'))->email}}" class="form-control"> 
                               
                 </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Foto do perfil</label>
+                    <input type="file" class="form-control" name="foto" aria-label="Upload" accept="image/*">
+                  </div>
                 <hr>
                 <div class="form-group">
                     <label>Senha</label> 
@@ -49,6 +54,7 @@
                      </ul>
                 </div> 
             @endif
+            
             {{--validaçao dos dados----------}}
             @if (isset($erro))
           

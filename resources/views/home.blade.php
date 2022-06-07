@@ -10,7 +10,7 @@
 <div class="container-fuid">
     <div class="row">
         <div class="col">
-            <h3>My List</h3>
+            <h3>Lista de tarefas</h3>
             <hr>
             <div class="my-2">
                 <a href="{{route('nova_tarefa')}}" class="btn btn-primary">Criar Tarefa</a>
@@ -28,7 +28,7 @@
                 <thead style="background-color: rgb(59, 59, 59); color:rgb(255, 247, 247)">
                     <tr>
                         <th>Tarefas</th>
-                        <th>Options</th>
+                        <th>Opções</th>
                     </tr>
                 </thead>
                 <body>

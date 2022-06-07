@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\V1;
 
 use App\Models\task;
 use App\Http\Requests\loguinRequest;
@@ -10,13 +10,13 @@ use App\Models\usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\cadastroRequest;
-use App\Http\Requests\recuperarSenhaRequest;
 use App\Mail\token;
-use DateTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use File;
+use App\Http\Controllers\Controller;
 
-class main extends Controller
+class MainController extends Controller
 {
     // usar pra verificar se existe sessao 
     private function checksessao()
@@ -30,6 +30,7 @@ class main extends Controller
 
     public function index()
     {
+        
         //pegar o id na sessao se existir
         if ($this->checksessao()) {
             $id = session()->get('usuario')->id;
@@ -48,6 +49,8 @@ class main extends Controller
     //chamar a pagigina inicial com as tarefas visiveis
     public function home()
     {
+      
+       // Storage::delete(public_path('assets\fotos_usuarios\foto.jpg'));
         if (!$this->checksessao()) {
             return redirect()->route('login');
         }
@@ -100,8 +103,15 @@ class main extends Controller
             return view('login', $erro);
         }
         
+        $usuari->Ultiomo_Login = now();
+        $usuari->timestamps = false;
+        $usuari->save();
+        $usuari->timestamps = true;
+        $usuari->save();
+        
         // iniciar a sesao e ir para o home
         session()->put('usuario', $usuari);
+        
         $usuario = session('usuario')->email;
         Log::channel('Registro_log')->info('Usuario '.$usuario.', fez um login');
 
@@ -148,8 +158,7 @@ class main extends Controller
         $email_usuario = trim($request->input('text_email'));
         $senha_usuario = trim($request->input('text_senha'));
         $senha_confirma = trim($request->input('text_senha_confirma'));
-
-
+      
         //verivicar se o email enviado ja esta cadastrado
         $usuari = usuario::where('email', $email_usuario)->first();
 
@@ -172,7 +181,7 @@ class main extends Controller
         //enviar token para o email
         $token = random_int(100000, 999999);
 
-        Mail::to($email_usuario)->send(new token($nome_usuario, $token));
+        //Mail::to($email_usuario)->send(new token($nome_usuario, $token));
         $senha = Hash::make($senha_usuario);
 
         //guardando informaçoes na sessao temporaria
@@ -210,6 +219,9 @@ class main extends Controller
             $erro = ['erro' => 'Codigo de verificação invalido.'];
             return view('comfirma_token', $erro);
         } else {
+
+
+
             //cadastrando usuario
             $usuario = new Usuario;
             $usuario->nome = session('nome');
@@ -394,7 +406,10 @@ class main extends Controller
         if (!$this->checksessao()) {
             return redirect()->route('login');
         }
-        return view('editar_perfil');
+        $id_usuario = session('usuario')->id;
+        $usuari = usuario::find( $id_usuario);
+        $dados = ['usuario' =>$usuari];
+        return view('editar_perfil',$dados);
     }
 
     //-----------------------rcebendo dados----------------------------
@@ -409,6 +424,16 @@ class main extends Controller
         $senha_usuario = trim($request->input('text_senha'));
         $id_usuario = session('usuario')->id;
         $email_atual = session('usuario')->email;
+
+        if($request->hasFile('foto') && $request->file('foto')->isValid()){
+
+            $request_foto = $request->foto;
+            $extension = $request_foto->extension();
+            $nome_foto = 'usuario'.$id_usuario.'.'.$extension;
+           // $request->foto->move(public_path('assets\fotos_usuarios'),$nome_foto);
+           
+        } 
+
 
         $usuari = usuario::where('email', $email_usuario)->first();
 
@@ -432,9 +457,15 @@ class main extends Controller
 
 
         //alterar os dados
+        $usuari->timestamps = true;
+        $usuario->save();
         $usuario = Usuario::find($id_usuario);
         $usuario->nome = $nome_usuario;
         $usuario->email = $email_usuario;
+        if(isset($nome_foto)){
+          $usuario->foto = $nome_foto;  
+          $request->foto->move(public_path('assets\fotos_usuarios'),$nome_foto);
+        }
         $usuario->save();
 
         //retorna a view com uma nova sessao com os dados alterados
@@ -469,7 +500,7 @@ class main extends Controller
 
         $task = task::where('id_usuario', $id_usuario);
         $task->delete();
-
+        File::delete('assets\fotos_usuarios/\/'.session('usuario')->foto);
 
         session()->forget('usuario');
 

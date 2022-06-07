@@ -20,6 +20,7 @@ class Usuarios extends Migration
             $table->string('nome', 50);
             $table->string('email', 50);
             $table->string('senha',200);
+            $table->string('foto',50);
             $table->dateTime('Ultiomo_Login')->nullable();
             $table->tinyInteger('ativo')->default(1);
             $table->Timestamps();

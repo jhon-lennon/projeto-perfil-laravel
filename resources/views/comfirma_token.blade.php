@@ -33,6 +33,7 @@
                                                       <div class="alert alert-danger text-center">{{$erro}}</div>
                         
                                                 @endif
+                                                {{session('token')}} 
         
                                     </div>
         

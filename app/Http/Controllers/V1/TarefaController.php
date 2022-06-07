@@ -1,25 +1,29 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\V1;
 
-use App\Models\usuario;
-use App\Models\tarefas;
 use App\Models\task;
 use DateTime;
 use Illuminate\Http\Request;
-use Usuarios;
+use App\Http\Controllers\Controller;
+use App\classes\enc;
 
-class main2 extends Controller
+class TarefaController extends Controller
 {
+
+   public function __construct(private enc $enc){}
+   
    //-----usar para encriptar-----
-   public function encriptar($valor){
-      return bin2hex(openssl_encrypt($valor, 'aes-256-cbc','4Hzxso5WHSxMYA93flJ14R6qtd0HftKF', OPENSSL_RAW_DATA,'p4Sml4pAdinhB384'));
-   }
-   //-----usar para densencriptar--
-   public function desencriptar($valor_enc){
-      return openssl_decrypt( hex2bin($valor_enc), 'aes-256-cbc','4Hzxso5WHSxMYA93flJ14R6qtd0HftKF', OPENSSL_RAW_DATA,'p4Sml4pAdinhB384');
+   public function encriptar($valor)
+   {
+      return bin2hex(openssl_encrypt($valor, 'aes-256-cbc', '4Hzxso5WHSxMYA93flJ14R6qtd0HftKF', OPENSSL_RAW_DATA, 'p4Sml4pAdinhB384'));
    }
 
+   //-----usar para densencriptar--
+   public function desencriptar($valor_enc)
+   {
+      return openssl_decrypt(hex2bin($valor_enc), 'aes-256-cbc', '4Hzxso5WHSxMYA93flJ14R6qtd0HftKF', OPENSSL_RAW_DATA, 'p4Sml4pAdinhB384');
+   }
 
    public function home()
    {
@@ -49,11 +53,12 @@ class main2 extends Controller
       $texto = $request->input('nova_tarefa');
       $id = session()->get('usuario')->id;
 
-      $tarefa = new task();
-      $tarefa->tarefas = $texto;
-      $tarefa->id_usuario = $id;
-      $tarefa->concluido = null;
-      $tarefa->save();
+      task::create([
+
+         'tarefas' => $texto,
+         'id_usuario' => $id,
+         'concluido' => null
+      ]);
 
       $id = session()->get('usuario')->id;
 
@@ -66,8 +71,9 @@ class main2 extends Controller
       if (!$this->checksessao()) {
          return redirect()->route('login');
       }
-      $id = $this->desencriptar($id);
 
+     // $desencriptar = new enc();
+      $id = $this->enc->desencriptar($id);
 
       $tarefa = task::find($id);
       $tarefa->visivel = 0;
@@ -127,17 +133,19 @@ class main2 extends Controller
 
    public function editar_tarefa($id)
    {
-      $id = $this->desencriptar($id);
-
       if (!$this->checksessao()) {
          return redirect()->route('login');
       }
+
+      $id = $this->desencriptar($id);
 
       $tarefa = task::find($id);
 
 
       return view('editar_tarefa', ['tarefa' => $tarefa]);
    }
+
+   
    public function editar(Request $request)
    {
       if (!$this->checksessao()) {
@@ -155,6 +163,8 @@ class main2 extends Controller
       $tarefa->save();
       return redirect()->route('home');
    }
+
+
    public function invisivel_tarefa()
    {
       if (!$this->checksessao()) {
@@ -178,8 +188,6 @@ class main2 extends Controller
       $tarefa = task::find($id);
       $tarefa->delete();
 
-
-
       return redirect()->route('home');
    }
 
@@ -192,7 +200,7 @@ class main2 extends Controller
    {
       if (!$this->checksessao()) {
          return redirect()->route('login');
-     }
+      }
 
       $usuario = session('usuario');
       return view('perfil', ['usuario' => $usuario]);
