@@ -25,9 +25,9 @@
             <div class="col">
                 
                 <h3 class="text-center mb-5">Editar Tarefa</h3>
-                <form action="{{route('editar')}}" method="post">
+                <form action="{{route('tarefaUpdate')}}" method="post">
                     @csrf
-                    <input type="hidden" name="id_tarefa" value="{{$tarefa->id}}">
+                    <input type="hidden" name="id_task" value="{{$tarefa->id}}">
                         <div class="row">
     
                             <div class="col-sm-4 offset-sm-4">
@@ -35,7 +35,7 @@
                                 <div class="form-group">
                                     <label for="criar_tarefa">Editar Tarefa:</label>
                                     <br>
-                                    <input type="text" value="{{$tarefa->tarefas}}" name="editar_tarefa" id="criar" class="form-control">
+                                    <input type="text" value="{{$tarefa->tarefas}}" name="text_task" id="criar" class="form-control">
                                     
     
                                         <div class="form-group">
@@ -43,6 +43,17 @@
                                             <input type="submit" value="Salvar" class="btn btn-primary btn-sm">
                                             <a href="{{route('home')}}" class="btn btn-secondary btn-sm">Cancelar</a>
                                         </div>
+                                        @if ($errors->any())
+            
+                                        <div class="alert alert-danger mt-2">
+                                            <ul>
+                                                
+                                                @foreach ($errors->all() as $mensagens)
+                                                    <li>{{$mensagens}}</li>
+                                                @endforeach
+                                             </ul>
+                                        </div> 
+                                    @endif
     
                                 </div>
     

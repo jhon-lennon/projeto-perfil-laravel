@@ -103,10 +103,7 @@ class MainController extends Controller
             return view('login', $erro);
         }
         
-        $usuari->Ultiomo_Login = now();
-        $usuari->timestamps = false;
-        $usuari->save();
-        $usuari->timestamps = true;
+        $usuari->last_login = now();
         $usuari->save();
         
         // iniciar a sesao e ir para o home
@@ -126,7 +123,7 @@ class MainController extends Controller
         if (!$this->checksessao()) {
             return redirect()->route('login');
         }
-        $usuario = session('usuario')->email;
+        $usuario = session('usuario');
 
         Log::channel('Registro_log')->info('Usuario '.$usuario.' saiu');
         session()->forget('usuario');
@@ -151,7 +148,7 @@ class MainController extends Controller
     {
 
         //validar dados
-        $request->validated();
+      //  $request->validated();
 
         //pegando dados sem espaços
         $nome_usuario = trim($request->input('text_nome'));
@@ -181,7 +178,7 @@ class MainController extends Controller
         //enviar token para o email
         $token = random_int(100000, 999999);
 
-        //Mail::to($email_usuario)->send(new token($nome_usuario, $token));
+        Mail::to($email_usuario)->send(new token($nome_usuario, $token));
         $senha = Hash::make($senha_usuario);
 
         //guardando informaçoes na sessao temporaria
@@ -457,11 +454,10 @@ class MainController extends Controller
 
 
         //alterar os dados
-        $usuari->timestamps = true;
-        $usuario->save();
         $usuario = Usuario::find($id_usuario);
         $usuario->nome = $nome_usuario;
         $usuario->email = $email_usuario;
+        $usuario->last_update = now();
         if(isset($nome_foto)){
           $usuario->foto = $nome_foto;  
           $request->foto->move(public_path('assets\fotos_usuarios'),$nome_foto);
@@ -469,6 +465,7 @@ class MainController extends Controller
         $usuario->save();
 
         //retorna a view com uma nova sessao com os dados alterados
+        session()->forget('usuario');
         $usuari = Usuario::find($id_usuario);
         session()->put('usuario', $usuari);
         $alterado = ['alterado' => 'Dados alterados'];

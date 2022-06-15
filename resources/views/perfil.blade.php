@@ -10,9 +10,9 @@
 
         <p>Nome: {{ $usuario->nome }}</p>
         <p>Email: {{ $usuario->email }}</p>
-        <p>Ultima atualização: {{ $usuario->updated_at }}</p>
-        <p>Cadastrado em: {{ $usuario->created_at }}</p>
-        <p>Ultimo login: {{ $usuario->Ultiomo_Login }}</p>
+        <p>Ultima atualização: {{ date('d/m/Y - H:i:s', strtotime($usuario->last_update))}}</p>
+        <p>Cadastrado em: {{ date('d/m/Y - H:i:s', strtotime($usuario->created_at)) }}</p>
+        <p>Ultimo login: {{ date('d/m/Y - H:i:s', strtotime($usuario->last_login ))}}</p>
 
         <div class="my-2">
             <a href="{{ route('editar_perfil') }}" class="btn btn-primary">Editar Dados</a>

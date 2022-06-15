@@ -37,7 +37,7 @@ route::get('/recuperar_senha', [MainController::class, 'recuperar_senha'])->name
 Route::post('/recuperar_senha_frm',[MainController::class, 'recuperar_senha_frm'])->name('recuperar_senha_frm');
 Route::post('/recuperar_senha_token',[MainController::class, 'recuperar_senha_token'])->name('recuperar_senha_token');
 Route::post('/recuperando_senha',[MainController::class, 'recuperando_senha'])->name('recuperando_senha');
-Route::get('excluir_conta',[MainController::class, 'excluir_conta'])->name('excluir_conta');
+Route::get('/excluir_conta',[MainController::class, 'excluir_conta'])->name('excluir_conta');
 
 //-------------tarefas------------------------
 
@@ -53,8 +53,13 @@ Route::get('/concluido/{id}',[TarefaController::class, 'concluido'])->name('conc
 Route::get('/afazer/{id}',[TarefaController::class, 'afazer'])->name('afazer');
 
 Route::get('/editar_tarefa/{id}',[TarefaController::class, 'editar_tarefa'])->name('editar_tarefa');
-route::post('/editar',[TarefaController::class, 'editar'])->name('editar');
+
 
 Route::get('/excluir_tarefa/{id}',[TarefaController::class, 'excluir_tarefa'])->name('excluir_tarefa');
 Route::get('/perfil',[TarefaController::class, 'perfil'])->name('perfil');
 
+Route::prefix('tarefa')->group(function(){
+    route::post('/create',[TarefaController::class, 'create'])->name('tarefaCreate');
+    route::post('/update',[TarefaController::class, 'update'])->name('tarefaUpdate');
+    Route::get('/delete/{id}',[TarefaController::class, 'destroy'])->name('tarefaDelete');
+});

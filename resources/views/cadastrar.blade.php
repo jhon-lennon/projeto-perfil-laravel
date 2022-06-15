@@ -19,10 +19,7 @@
                     <input type="email" name="text_email" class="form-control"> 
                               
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Foto do perfil</label>
-                    <input type="file" class="form-control" name="foto" aria-label="Upload" accept="image/*">
-                  </div>
+              
                 <div class="form-group">
                     <label>Senha</label> 
                     <input type="password" name="text_senha" class="form-control">           

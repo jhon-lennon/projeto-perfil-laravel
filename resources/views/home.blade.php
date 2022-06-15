@@ -33,8 +33,6 @@
                 </thead>
                 <body>
                     
-                        
-                    
                     @foreach ($tarefa as $tare)
                         <tr>
                             <td style="width: 70%">{{$tare->tarefas}}</td>
@@ -49,8 +47,6 @@
                                         <a href="{{route('afazer',['id'=> $enc->encriptar( $tare->id)])}}" class="btn btn-success btn-sm"><i class="fa fa-times"></i></a>
                                 @endif
 
-                        
-                           
                                 @if ($tare->visivel == null)
                                 
                                     <a href="{{route('invisivel',['id'=> $enc->encriptar( $tare->id)])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye-slash"></i></a>
@@ -61,7 +57,7 @@
 
                                 <a href="{{route('editar_tarefa',['id'=> $enc->encriptar( $tare->id)])}}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
 
-                                <a href="{{route('excluir_tarefa',['id'=> $enc->encriptar( $tare->id)])}}" class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{route('tarefaDelete',['id'=> $tare->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
 
                             </td>  
                                                   
@@ -72,9 +68,6 @@
                 @endif
             </body>
             </table>
-
-                
-           
 
         </div>
 

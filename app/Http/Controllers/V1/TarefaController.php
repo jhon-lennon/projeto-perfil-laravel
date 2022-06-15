@@ -7,6 +7,8 @@ use DateTime;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\classes\enc;
+use App\Http\Requests\TaskRequest;
+use App\Services\TaskService;
 
 class TarefaController extends Controller
 {
@@ -40,31 +42,18 @@ class TarefaController extends Controller
 
    public function nova_tarefa()
    {
-
       return view('nova_tarefa');
    }
 
-   public function criar_tarefa(Request $request)
+   public function create(TaskRequest $request, TaskService $taskService)
    {
       if (!$this->checksessao()) {
          return redirect()->route('login');
       }
+      $taskService->createStudent($request);
 
-      $texto = $request->input('nova_tarefa');
-      $id = session()->get('usuario')->id;
+      return redirect('home');
 
-      task::create([
-
-         'tarefas' => $texto,
-         'id_usuario' => $id,
-         'concluido' => null
-      ]);
-
-      $id = session()->get('usuario')->id;
-
-      $tarefa = task::where('id_usuario', $id)->where('visivel', 1)->orderBy('created_at', 'desc')->get();
-
-      return view('home', ['tarefa' => $tarefa]);
    }
    public function visibilidade($id)
    {
@@ -146,21 +135,14 @@ class TarefaController extends Controller
    }
 
    
-   public function editar(Request $request)
+   public function update( TaskRequest $request, TaskService $taskService)
    {
       if (!$this->checksessao()) {
          return redirect()->route('login');
       }
+      
+      $taskService->updeteTask($request);
 
-      $id = $request->input('id_tarefa');
-      $id_usuario = session()->get('usuario')->id;
-
-      $tarefa = task::find($id);
-      $texto = $request->input('editar_tarefa');
-
-      $tarefa->tarefas = $texto;
-      $tarefa->id_usuario = $id_usuario;
-      $tarefa->save();
       return redirect()->route('home');
    }
 
@@ -178,15 +160,13 @@ class TarefaController extends Controller
       return view('home', ['tarefa' => $tarefa]);
    }
 
-   public function excluir_tarefa($id)
+   public function destroy($id, TaskService $taskService)
    {
       if (!$this->checksessao()) {
          return redirect()->route('login');
       }
-      $id = $this->desencriptar($id);
-
-      $tarefa = task::find($id);
-      $tarefa->delete();
+      
+      $taskService->destroyTask($id);
 
       return redirect()->route('home');
    }
