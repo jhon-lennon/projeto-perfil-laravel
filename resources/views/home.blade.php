@@ -13,8 +13,8 @@
             <h3>Lista de tarefas</h3>
             <hr>
             <div class="my-2">
-                <a href="{{route('nova_tarefa')}}" class="btn btn-primary">Criar Tarefa</a>
-                <a href="{{route('invisivel_tarefa')}}" class="btn btn-primary">Tatefas invisíveis</a>
+                <a href="{{route('tarefaCreate')}}" class="btn btn-primary">Criar Tarefa</a>
+                <a href="{{route('tarefaTasksInvisible')}}" class="btn btn-primary">Tatefas invisíveis</a>
                 <a href="{{route('home')}}" class="btn btn-primary">inicio</a>
 
             </div>
@@ -39,23 +39,23 @@
 
                             <td>
                              
-                                @if ($tare->concluido == null)
+                                @if ($tare->concluido == 0)
                                 
-                                    <a href="{{route('concluido',['id'=> $enc->encriptar( $tare->id)])}}" class="btn btn-primary btn-sm"><i class="fa fa-check"></i></a>
+                                    <a href="{{route('tarefaChangeStatus',['id'=> $tare->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-check"></i></a>
     
                                     @else
-                                        <a href="{{route('afazer',['id'=> $enc->encriptar( $tare->id)])}}" class="btn btn-success btn-sm"><i class="fa fa-times"></i></a>
+                                        <a href="{{route('tarefaChangeStatus',['id'=> $tare->id])}}" class="btn btn-success btn-sm"><i class="fa fa-times"></i></a>
                                 @endif
 
-                                @if ($tare->visivel == null)
+                                @if ($tare->visivel == 0)
                                 
-                                    <a href="{{route('invisivel',['id'=> $enc->encriptar( $tare->id)])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye-slash"></i></a>
+                                    <a href="{{route('tarefaChangeVisibility',['id'=> $tare->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye-slash"></i></a>
     
                                     @else
-                                        <a href="{{route('visibilidade',['id'=> $enc->encriptar( $tare->id)])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+                                        <a href="{{route('tarefaChangeVisibility',['id'=>$tare->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
                                 @endif
 
-                                <a href="{{route('editar_tarefa',['id'=> $enc->encriptar( $tare->id)])}}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
+                                <a href="{{route('tarefaEdit',['id'=> $tare->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
 
                                 <a href="{{route('tarefaDelete',['id'=> $tare->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-trash"></i></a>
 

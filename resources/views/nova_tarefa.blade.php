@@ -8,16 +8,16 @@
               
                 <h3 class="text-center mb-5">Nova Tarefa</h3> 
               
-                <form action="{{ route('tarefaCreate') }}" method="post">
+                <form action="{{ route('tarefaStore') }}" method="post">
                     @csrf
                     <div class="row">
 
                         <div class="col-sm-4 offset-sm-4">
                             <hr>
                             <div class="form-group">
-                                <label for="criar_tarefa">Nova Tarefa:</label>
+                                <label for="tarefaCreate">Nova Tarefa:</label>
                                 <br>
-                                <input type="text" name="new_task" id="criar" class="form-control">
+                                <input type="text" name="text_task" id="criar" class="form-control">
 
 
                                 <div class="form-group">

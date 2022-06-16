@@ -14,6 +14,7 @@ class task extends Model
         'tarefas',
         'id_usuario',
         'concluido',
+        'visivel',
         'created_at',
         'updated_at'
     ];

@@ -112,7 +112,7 @@ class MainController extends Controller
         $usuario = session('usuario')->email;
         Log::channel('Registro_log')->info('Usuario '.$usuario.', fez um login');
 
-        return redirect()->route('index');
+        return redirect()->route('tarefaIndex');
     }
     //==============================================================================================================================
 
@@ -503,6 +503,16 @@ class MainController extends Controller
 
 
         return redirect()->route('login');
+    }
+
+    public function perfil()
+    {
+       if (!$this->checksessao()) {
+          return redirect()->route('login');
+       }
+ 
+       $usuario = session('usuario');
+       return view('perfil', ['usuario' => $usuario]);
     }
     //=============================================================================================================================== 
 }
